@@ -1,0 +1,46 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-stationery",
+      "description": "Premium desk with elegant pens and notebooks",
+      "imageUrl": "https://picsum.photos/seed/stationery1/1200/600",
+      "imageHint": "premium stationery desk"
+    },
+    {
+      "id": "fountain-pen",
+      "description": "Rose gold fountain pen",
+      "imageUrl": "https://picsum.photos/seed/pen1/600/600",
+      "imageHint": "fountain pen"
+    },
+    {
+      "id": "leather-notebook",
+      "description": "Handcrafted leather notebook",
+      "imageUrl": "https://picsum.photos/seed/book1/600/600",
+      "imageHint": "leather journal"
+    },
+    {
+      "id": "washi-tape",
+      "description": "Assorted pastel washi tapes",
+      "imageUrl": "https://picsum.photos/seed/tape1/600/600",
+      "imageHint": "washi tape set"
+    },
+    {
+      "id": "desk-organizer",
+      "description": "Minimalist wooden desk organizer",
+      "imageUrl": "https://picsum.photos/seed/organizer1/600/600",
+      "imageHint": "desk organizer"
+    },
+    {
+      "id": "ink-well",
+      "description": "Deep purple calligraphy ink",
+      "imageUrl": "https://picsum.photos/seed/ink1/600/600",
+      "imageHint": "calligraphy ink"
+    },
+    {
+      "id": "mercado-pago-logo",
+      "description": "Mercado Pago payment provider logo",
+      "imageUrl": "https://logodownload.org/wp-content/uploads/2019/06/mercado-pago-logo.png",
+      "imageHint": "mercado pago logo"
+    }
+  ]
+}
