@@ -28,21 +28,18 @@ export function Hero() {
           className="space-y-6"
         >
           <Badge className="bg-accent/80 backdrop-blur-md text-white border-none py-1.5 px-4 rounded-full text-xs font-medium uppercase tracking-[0.2em]">
-            New Collection 2024
+            Novo site da papelaria
           </Badge>
-          <h1 className="font-headline text-6xl md:text-8xl font-bold leading-tight">
-            Write Your <br />
-            <span className="text-primary italic">Signature</span> Story
+          <h1 className="font-headline text-7xl md:text-8xl font-bold leading-tight">
+            Deixe seu <br />
+            Mundo <span className="text-primary italic">Colorido</span>
           </h1>
           <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed font-body">
-            Discover a world of exquisite paper goods and precision writing instruments designed for those who appreciate the tactile beauty of expression.
+            Já pensou em comprar aquele presente especial para um amigo ou familiar? Ou talvez renovar seu material escolar com itens de qualidade? Explore nossa seleção de produtos que combinam estilo e funcionalidade, perfeitos para todas as idades e ocasiões.
           </p>
           <div className="flex gap-4 pt-4">
             <Button asChild size="lg" className="h-14 px-8 text-md rounded-full">
               <Link href="/catalog">Shop Now <ArrowRight className="ml-2 w-5 h-5" /></Link>
-            </Button>
-            <Button variant="outline" size="lg" className="h-14 px-8 text-md text-white border-white hover:bg-white hover:text-primary rounded-full">
-              View Lookbook
             </Button>
           </div>
         </motion.div>

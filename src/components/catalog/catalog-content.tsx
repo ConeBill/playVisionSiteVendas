@@ -24,31 +24,29 @@ export function CatalogContent({
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredProducts = useMemo(() => {
-    let result = initialProducts;
-
-    if (categoryParam) {
-      result = result.filter(product =>
-        product.category.toLowerCase().replace(/\s+/g, '-') === categoryParam
-      );
-    }
-
     const term = searchTerm.trim().toLowerCase();
-    if (term) {
-      result = result.filter(product =>
-        product.name.toLowerCase().includes(term)
-      );
-    }
+    const source = initialProducts;
+    const base = term
+      ? source.filter(p => p.name.toLowerCase().includes(term))
+      : source;
 
-    return result;
+    if (!categoryParam) return base;
+
+    const normalizedParam = categoryParam.toLowerCase();
+    return base.filter(product => {
+      const categoryName = (product.category || '').trim();
+      const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+      return categorySlug === normalizedParam || categoryName.toLowerCase() === normalizedParam;
+    });
   }, [searchTerm, categoryParam, initialProducts]);
 
   return (
     <div className="container mx-auto px-6 py-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
         <div className="space-y-4">
-          <h1 className="font-headline text-5xl font-bold">Explore Our Boutique</h1>
+          <h1 className="font-headline text-5xl font-bold">Explore nossa variedade</h1>
           <p className="text-muted-foreground max-w-lg">
-            From handcrafted journals to precision fountain pens, find everything you need for your artistic journey.
+            Encontre produtos selecionados para qualidade e experiência.
           </p>
         </div>
 

@@ -5,6 +5,7 @@ const ESTOQUE_API = 'https://estoquedanny.netlify.app/api/produtos';
 
 function mapToDomain(dto: ProductApiDTO): Product {
   const name = dto.nome.trim() || dto.codigo;
+  const category = (dto.categoria && dto.categoria.trim()) ? dto.categoria.trim() : 'Não catalogado';
   const slug = `${dto.codigo}-${name.toLowerCase().replace(/\s+/g, '-')}`.replace(/[^a-z0-9-]/g, '');
   return {
     id: dto.id,
@@ -16,7 +17,7 @@ function mapToDomain(dto: ProductApiDTO): Product {
     price: dto.preco,
     salePrice: undefined,
     currency: 'BRL',
-    category: dto.categoria || 'Uncategorized',
+    category,
     images: dto.foto ? [dto.foto] : [],
     features: [`Código: ${dto.codigo}`, dto.disponivel ? 'Disponível' : 'Indisponível'],
     stock: dto.estoque,
@@ -30,18 +31,13 @@ function mapToDomain(dto: ProductApiDTO): Product {
 export class ProductService {
   static async getFeaturedProducts(): Promise<Product[]> {
     const apiKey = process.env.ESTOQUE_DANNY_KEY;
-    if (!apiKey) {
-      throw new Error('ESTOQUE_DANNY_KEY is not configured');
-    }
+    if (!apiKey) throw new Error('ESTOQUE_DANNY_KEY is not configured');
 
     const res = await fetch(ESTOQUE_API, {
       headers: { 'x-api-key': apiKey, accept: 'application/json' },
       next: { revalidate: 30 },
     });
-
-    if (!res.ok) {
-      throw new Error(`Failed to load products (${res.status})`);
-    }
+    if (!res.ok) throw new Error(`Failed to load products (${res.status})`);
 
     const data = (await res.json()) as ProductsApiResponse;
     return data.produtos.map(mapToDomain);
@@ -65,20 +61,17 @@ export class ProductService {
     const products = await this.getFeaturedProducts();
     const seen = new Set<string>();
     const categories = products
-      .map(p => p.category)
-      .filter((category): category is string => {
-        const normalized = category.trim();
-        if (!normalized || seen.has(normalized)) {
-          return false;
-        }
-        seen.add(normalized);
+      .map(p => ({ raw: (p.category || '').trim(), name: (p.category || '').trim() || 'Não catalogado' }))
+      .filter((item): item is { raw: string; name: string } => {
+        if (!item.raw || seen.has(item.raw)) return false;
+        seen.add(item.raw);
         return true;
       })
-      .map((name, index) => ({
+      .map(({ raw, name }, index) => ({
         id: String(index + 1),
         name,
         slug: name.toLowerCase().replace(/\s+/g, '-'),
-        imageUrl: `https://picsum.photos/seed/${name.toLowerCase().replace(/\s+/g, '-')}/400/400`,
+        imageUrl: `https://picsum.photos/seed/${name.toLowerCase().replace(/\s+/g, '-')}${index}/400/400`,
       }));
 
     return categories;

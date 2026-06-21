@@ -16,7 +16,7 @@ export class ProductAdapter {
       price: dto.price_amount,
       salePrice: dto.discounted_price,
       currency: 'USD',
-      category: dto.categories[0] || 'Uncategorized',
+      category: dto.categories[0] || 'Não catalogado',
       images: dto.media.map(m => m.url),
       features: (dto.attributes.features as string[]) || [],
       stock: dto.inventory_level,
