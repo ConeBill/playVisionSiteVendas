@@ -71,7 +71,7 @@ export default function CartPage() {
                     <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
                     <button onClick={() => updateQuantity(item.id, item.quantity + 1)}><Plus className="w-3 h-3" /></button>
                   </div>
-                  <span className="font-bold text-lg">${((item.salePrice || item.price) * item.quantity).toFixed(2)}</span>
+                  <span className="font-bold text-lg">R${((item.salePrice || item.price) * item.quantity).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function CartPage() {
             <div className="space-y-4">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-bold">${subtotal().toFixed(2)}</span>
+                <span className="font-bold">R${subtotal().toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Shipping</span>
@@ -94,7 +94,7 @@ export default function CartPage() {
               <Separator />
               <div className="flex justify-between text-xl font-bold">
                 <span>Total</span>
-                <span className="text-primary">${subtotal().toFixed(2)}</span>
+                <span className="text-primary">R${subtotal().toFixed(2)}</span>
               </div>
             </div>
 

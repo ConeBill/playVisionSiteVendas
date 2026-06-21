@@ -45,7 +45,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="flex flex-col gap-8">
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">{product.category}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">{product.category}</span>
+                {typeof product.stock === 'number' && (
+                  <span className="text-[11px] font-semibold text-foreground/80 bg-muted/70 px-2 py-0.5 rounded-full">
+                    Estoque: {product.stock}
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'fill-primary text-primary' : 'text-muted'}`} />
@@ -60,11 +67,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="flex items-baseline gap-4 mt-4">
               {product.salePrice ? (
                 <>
-                  <span className="text-4xl font-bold text-primary">${product.salePrice.toFixed(2)}</span>
-                  <span className="text-2xl text-muted-foreground line-through">${product.price.toFixed(2)}</span>
+                  <span className="text-4xl font-bold text-primary">R${product.salePrice.toFixed(2)}</span>
+                  <span className="text-2xl text-muted-foreground line-through">R${product.price.toFixed(2)}</span>
                 </>
               ) : (
-                <span className="text-4xl font-bold">${product.price.toFixed(2)}</span>
+                <span className="text-4xl font-bold">R${product.price.toFixed(2)}</span>
               )}
             </div>
           </div>

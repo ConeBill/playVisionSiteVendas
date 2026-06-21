@@ -137,9 +137,9 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex-grow">
                   <p className="text-sm font-bold">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">${(item.salePrice || item.price).toFixed(2)} each</p>
+                  <p className="text-xs text-muted-foreground">R${(item.salePrice || item.price).toFixed(2)} each</p>
                 </div>
-                <p className="font-bold text-sm">${((item.salePrice || item.price) * item.quantity).toFixed(2)}</p>
+                <p className="font-bold text-sm">R${((item.salePrice || item.price) * item.quantity).toFixed(2)}</p>
               </div>
             ))}
           </div>
@@ -147,7 +147,7 @@ export default function CheckoutPage() {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Subtotal</span>
-              <span className="font-bold">${subtotal().toFixed(2)}</span>
+              <span className="font-bold">R${subtotal().toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Shipping</span>
@@ -155,7 +155,7 @@ export default function CheckoutPage() {
             </div>
             <div className="flex justify-between text-xl font-bold pt-4">
               <span>Total</span>
-              <span className="text-primary">${subtotal().toFixed(2)}</span>
+              <span className="text-primary">R${subtotal().toFixed(2)}</span>
             </div>
           </div>
         </div>

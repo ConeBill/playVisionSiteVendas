@@ -63,16 +63,23 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         
         <div className="mt-4 space-y-1">
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-widest">{product.category}</p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-widest">{product.category}</p>
+            {typeof product.stock === 'number' && (
+              <span className="text-[11px] font-semibold text-foreground/80 bg-muted/70 px-2 py-0.5 rounded-full">
+                Estoque: {product.stock}
+              </span>
+            )}
+          </div>
           <h3 className="font-headline text-lg font-medium leading-tight group-hover:text-primary transition-colors">{product.name}</h3>
           <div className="flex items-center gap-2">
             {product.salePrice ? (
               <>
-                <span className="text-primary font-bold">${product.salePrice.toFixed(2)}</span>
-                <span className="text-muted-foreground text-sm line-through">${product.price.toFixed(2)}</span>
+                <span className="text-primary font-bold">R${product.salePrice.toFixed(2)}</span>
+                <span className="text-muted-foreground text-sm line-through">R${product.price.toFixed(2)}</span>
               </>
             ) : (
-              <span className="text-foreground font-bold">${product.price.toFixed(2)}</span>
+              <span className="text-foreground font-bold">R${product.price.toFixed(2)}</span>
             )}
           </div>
         </div>

@@ -5,6 +5,7 @@ import { ProductCard } from '@/components/product/ProductCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import type { Product, Category } from '@/domain/models/product';
 
@@ -17,15 +18,29 @@ export function CatalogContent({
   initialProducts,
   initialCategories,
 }: CatalogContentProps) {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category') || undefined;
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredProducts = useMemo(() => {
+    let result = initialProducts;
+
+    if (categoryParam) {
+      result = result.filter(product =>
+        product.category.toLowerCase().replace(/\s+/g, '-') === categoryParam
+      );
+    }
+
     const term = searchTerm.trim().toLowerCase();
-    if (!term) return initialProducts;
-    return initialProducts.filter(product =>
-      product.name.toLowerCase().includes(term)
-    );
-  }, [searchTerm, initialProducts]);
+    if (term) {
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(term)
+      );
+    }
+
+    return result;
+  }, [searchTerm, categoryParam, initialProducts]);
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -51,11 +66,20 @@ export function CatalogContent({
       </div>
 
       <div className="flex flex-wrap gap-4 mb-12">
-        <Button variant="default" asChild className="rounded-full">
+        <Button
+          variant={categoryParam ? 'outline' : 'default'}
+          asChild
+          className="rounded-full"
+        >
           <Link href="/catalog">Todos</Link>
         </Button>
         {initialCategories.map(cat => (
-          <Button key={cat.id} variant="outline" asChild className="rounded-full">
+          <Button
+            key={cat.id}
+            variant={categoryParam === cat.slug ? 'default' : 'outline'}
+            asChild
+            className="rounded-full"
+          >
             <Link href={`/catalog?category=${cat.slug}`}>{cat.name}</Link>
           </Button>
         ))}
