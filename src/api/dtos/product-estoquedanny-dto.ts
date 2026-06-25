@@ -5,6 +5,9 @@ export interface ProductApiDTO {
   preco: number;
   estoque: number;
   disponivel: boolean;
+  categoria?: string;
+  fotos?: string[];
+  foto?: string;
 }
 
 export interface ProductsApiResponse {

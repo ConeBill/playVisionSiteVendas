@@ -7,6 +7,12 @@ function mapToDomain(dto: ProductApiDTO): Product {
   const name = dto.nome.trim() || dto.codigo;
   const category = (dto.categoria && dto.categoria.trim()) ? dto.categoria.trim() : 'Não catalogado';
   const slug = `${dto.codigo}-${name.toLowerCase().replace(/\s+/g, '-')}`.replace(/[^a-z0-9-]/g, '');
+  const images = (() => {
+    const arr = Array.isArray(dto.fotos) ? dto.fotos.filter((img): img is string => typeof img === 'string' && img.trim().length > 0) : [];
+    if (arr.length) return arr.slice(0, 6);
+    if (typeof dto.foto === 'string' && dto.foto.trim().length > 0) return [dto.foto.trim()];
+    return [];
+  })();
   return {
     id: dto.id,
     externalId: dto.id,
@@ -18,7 +24,7 @@ function mapToDomain(dto: ProductApiDTO): Product {
     salePrice: undefined,
     currency: 'BRL',
     category,
-    images: dto.foto ? [dto.foto] : [],
+    images,
     features: [`Código: ${dto.codigo}`, dto.disponivel ? 'Disponível' : 'Indisponível'],
     stock: dto.estoque,
     status: dto.disponivel ? 'active' : 'out_of_stock',

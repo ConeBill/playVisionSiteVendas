@@ -38,9 +38,7 @@ export function Navbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="p-2 hover:bg-muted rounded-full transition-colors">
-          <Search className="w-5 h-5" />
-        </button>
+        
         <Link href="/cart" className="p-2 hover:bg-muted rounded-full transition-colors relative">
           <ShoppingBag className="w-5 h-5" />
           {mounted && totalItems > 0 && (

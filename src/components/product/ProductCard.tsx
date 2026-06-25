@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
 
+const LOCAL_PRODUCT_FALLBACK = '/img/hero-stationery.jpg';
+
 interface ProductCardProps {
   product: Product;
 }
@@ -36,21 +38,20 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <Link href={`/product/${product.slug}`}>
         <div className="relative aspect-square overflow-hidden rounded-xl bg-muted border">
-          {product.images[0] ? (
-            <Image
-              src={product.images[0]}
-              alt={product.name}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-          ) : (
-            <div className="flex items-center justify-center text-xs text-muted-foreground font-medium text-center p-4">
-              {product.name}
-            </div>
-          )}
-          {product.salePrice && (
-            <Badge className="absolute top-3 left-3 bg-primary">Sale</Badge>
-          )}
+            {(() => {
+              const src = (product.images && product.images[0] && String(product.images[0]).trim().length) ? product.images[0] : LOCAL_PRODUCT_FALLBACK;
+              return (
+                <Image
+                  src={src}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              );
+            })()}
+            {product.salePrice && (
+              <Badge className="absolute top-3 left-3 bg-primary">Sale</Badge>
+            )}
           <button className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur shadow-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white text-muted-foreground hover:text-primary">
             <Heart className="w-4 h-4" />
           </button>
