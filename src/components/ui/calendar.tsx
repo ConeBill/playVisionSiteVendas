@@ -54,14 +54,6 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      components={{
-        Previous: ({ className, ...props }: React.ComponentPropsWithoutRef<"button"> & { className?: string }) => (
-          <ChevronLeft className={cn("h-4 w-4", className)} {...props} />
-        ),
-        Next: ({ className, ...props }: React.ComponentPropsWithoutRef<"button"> & { className?: string }) => (
-          <ChevronRight className={cn("h-4 w-4", className)} {...props} />
-        ),
-      }}
       {...props}
     />
   )
