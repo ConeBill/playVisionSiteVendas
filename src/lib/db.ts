@@ -7,7 +7,7 @@ if (!connectionString) {
 }
 
 const globalPool = globalThis as unknown as {
-  pgPool?: Pool;
+  pool?: Pool;
 };
 
 export const db =
