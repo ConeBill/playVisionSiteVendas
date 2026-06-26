@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Search, SlidersHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface SearchFormProps {
   initialQuery?: string;
