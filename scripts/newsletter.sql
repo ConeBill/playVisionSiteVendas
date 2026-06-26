@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id BIGSERIAL PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  confirmed_at TIMESTAMPTZ
+);
