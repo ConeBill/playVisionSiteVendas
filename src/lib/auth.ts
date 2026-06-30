@@ -11,10 +11,12 @@ export const authOptions = {
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      allowDangerousEmailAccountLinking: true,
     }),
     CredentialsProvider({
+      id: 'credentials',
       name: 'Email e senha',
       credentials: {
         email: { label: 'Email', type: 'email' },
@@ -30,7 +32,7 @@ export const authOptions = {
         const user = res.rows[0];
         if (!user) return null;
 
-        const valid = bcrypt.compare(credentials.password, user.password_hash);
+        const valid = bcrypt.compareSync(credentials.password, user.password_hash);
         if (!valid) return null;
 
         return {
@@ -41,5 +43,5 @@ export const authOptions = {
         };
       },
     }),
-  ],
+  ]
 };

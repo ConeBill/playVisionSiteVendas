@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/store/use-cart-store';
 import { cn } from '@/lib/utils';
+import { UserMenu } from '@/components/auth/UserMenu';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,9 +48,7 @@ export function Navbar() {
             </span>
           )}
         </Link>
-        <Link href="/account" className="hidden sm:flex p-2 hover:bg-muted rounded-full transition-colors">
-          <User className="w-5 h-5" />
-        </Link>
+        <UserMenu />
         <button 
           className="md:hidden p-2 hover:bg-muted rounded-full"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

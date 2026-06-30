@@ -47,6 +47,15 @@ export const pgAdapter = {
     return res.rows[0] ?? null;
   },
 
+  async getUserByAccount(providerAccountId: any) {
+    const { provider, providerAccountId: id } = providerAccountId;
+    const res = await pool.query(
+      'SELECT u.* FROM users u JOIN accounts a ON a.user_id = u.id WHERE a.provider = $1 AND a.provider_account_id = $2',
+      [provider, id]
+    );
+    return res.rows[0] ?? null;
+  },
+
   async updateUser(profile: any) {
     const fields: string[] = [];
     const values: any[] = [];
@@ -74,12 +83,13 @@ export const pgAdapter = {
     const userId = profile.userId;
     const provider = profile.provider;
     const providerAccountId = profile.providerAccountId;
+    const type = profile.type || 'oauth';
 
     await pool.query(
-      `INSERT INTO accounts (user_id, provider, provider_account_id)
-       VALUES ($1, $2, $3)
+      `INSERT INTO accounts (user_id, type, provider, provider_account_id)
+       VALUES ($1, $2, $3, $4)
        ON CONFLICT (provider, provider_account_id) DO NOTHING`,
-      [userId, provider, providerAccountId]
+      [userId, type, provider, providerAccountId]
     );
   },
 
@@ -123,6 +133,32 @@ export const pgAdapter = {
       sessionToken: row.session_token,
       userId: row.user_id,
       expires: row.expires,
+      user: {
+        id: row.id,
+        name: row.name,
+        email: row.email,
+        emailVerified: row.email_verified,
+        image: row.image,
+      },
+    };
+  },
+
+  async getSessionAndUser(sessionToken: string) {
+    const res = await pool.query(
+      `SELECT s.session_token, s.user_id, s.expires, u.id, u.name, u.email, u.email_verified, u.image
+       FROM sessions s
+       JOIN users u ON s.user_id = u.id
+       WHERE s.session_token = $1`,
+      [sessionToken]
+    );
+    const row = res.rows[0];
+    if (!row) return null;
+    return {
+      session: {
+        sessionToken: row.session_token,
+        userId: row.user_id,
+        expires: row.expires,
+      },
       user: {
         id: row.id,
         name: row.name,
