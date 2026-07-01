@@ -1,5 +1,5 @@
 
-"use client"
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,6 +10,8 @@ import { useCartStore } from '@/store/use-cart-store';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 const LOCAL_PRODUCT_FALLBACK = '/img/hero-stationery.jpg';
 
@@ -19,14 +21,45 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore(state => state.addItem);
+  const { status } = useSession();
+  const isLoggedIn = status === 'authenticated';
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     addItem(product, 1);
     toast({
-      title: "Added to cart",
+      title: 'Added to cart',
       description: `${product.name} has been added to your bag.`,
     });
+  };
+
+  const toggleFavorite = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isLoggedIn) return;
+    setFavoriteLoading(true);
+    try {
+      const res = await fetch('/api/favorites', {
+        method: isFavorite ? 'DELETE' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: product.id }),
+      });
+      if (!res.ok) throw new Error();
+      setIsFavorite(!isFavorite);
+      toast({
+        title: isFavorite ? 'Removido dos favoritos' : 'Adicionado aos favoritos',
+        description: product.name,
+      });
+    } catch {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível atualizar favoritos.',
+        variant: 'destructive',
+      });
+    } finally {
+      setFavoriteLoading(false);
+    }
   };
 
   return (
@@ -52,9 +85,15 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.salePrice && (
               <Badge className="absolute top-3 left-3 bg-primary">Sale</Badge>
             )}
-          <button className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur shadow-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white text-muted-foreground hover:text-primary">
-            <Heart className="w-4 h-4" />
-          </button>
+          {isLoggedIn && (
+            <button
+              onClick={toggleFavorite}
+              disabled={favoriteLoading}
+              className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur shadow-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white text-muted-foreground hover:text-primary"
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current text-red-500' : ''}`} />
+            </button>
+          )}
           
           <div className="absolute bottom-4 left-0 right-0 flex justify-center translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
             <Button onClick={handleQuickAdd} size="sm" className="shadow-lg">

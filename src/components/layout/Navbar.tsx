@@ -6,6 +6,7 @@ import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/store/use-cart-store';
 import { cn } from '@/lib/utils';
 import { UserMenu } from '@/components/auth/UserMenu';
+import { FavoritesMenu } from '@/components/auth/FavoritesMenu';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,9 +47,10 @@ export function Navbar() {
             <span className="absolute top-0 right-0 bg-accent text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
               {totalItems}
             </span>
-          )}
-        </Link>
-        <UserMenu />
+            )}
+            </Link>
+            <FavoritesMenu />
+            <UserMenu />
         <button 
           className="md:hidden p-2 hover:bg-muted rounded-full"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
