@@ -2,6 +2,7 @@
 import { Metadata } from 'next';
 import AccountForm from './account-form';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Minha Conta | Play Vision Papelaria',
   description: 'Gerencie seus dados cadastrais.',
