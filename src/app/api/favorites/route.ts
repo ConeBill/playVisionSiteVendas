@@ -15,7 +15,7 @@ export async function GET() {
   try {
     const session = (await getServerSession(authOptions as any)) as any;
     const userId = session?.user?.id;
-    if (!userId) return ok({ favorites: [] });
+    if (!userId) return ok({ favorites: [] }, 401);
 
     const res = await db.query(
       `SELECT f.product_id, p.name, p.price, p.images
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     const userId = session?.user?.id;
     if (!userId) return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
 
-    const { productId } = await request.json();
+    const { productId } = await request.json() as Record<string, any>;
     if (!productId) return NextResponse.json({ error: 'productId obrigatório.' }, { status: 400 });
 
     await db.query(
@@ -58,7 +58,7 @@ export async function DELETE(request: Request) {
     const userId = session?.user?.id;
     if (!userId) return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
 
-    const { productId } = await request.json();
+    const { productId } = await request.json() as Record<string, any>;
     if (!productId) return NextResponse.json({ error: 'productId obrigatório.' }, { status: 400 });
 
     await db.query('DELETE FROM favorites WHERE user_id = $1 AND product_id = $2', [userId, productId]);
