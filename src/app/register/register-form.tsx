@@ -30,7 +30,10 @@ export default function RegisterForm() {
         setLoading(false);
         return;
       }
-      await signIn('credentials', { email, password, callbackUrl: '/' });
+      const signInRes = await signIn('credentials', { email, password, callbackUrl: '/', redirect: false });
+      if (signInRes?.error) {
+        setError('Conta criada, mas não foi possível entrar automaticamente. Tente fazer login.');
+      }
     } catch (err) {
       setError('Erro inesperado.');
       setLoading(false);

@@ -48,7 +48,24 @@ export default function LoginForm() {
       </button>
       <button
         type="button"
-        onClick={() => signIn('google', { callbackUrl })}
+        onClick={async () => {
+          setError(null);
+          setLoading(true);
+          try {
+            const res = await signIn('google', {
+              callbackUrl,
+              redirect: false,
+            });
+            if (res?.error) {
+              setError(res.error);
+            }
+          } catch (err) {
+            setError('Erro inesperado ao entrar com Google.');
+          } finally {
+            setLoading(false);
+          }
+        }}
+        disabled={loading}
         className="w-full rounded border py-2"
       >
         Entrar com Google
