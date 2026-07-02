@@ -2,8 +2,7 @@ import { Suspense } from 'react';
 import { ProductService } from '@/services/product-service';
 import { CatalogContent } from '@/components/catalog/catalog-content';
 
-export const dynamic = 'force-dynamic';
-
+// Permite cache do Next.js para evitar múltiplas requisições à API externa.
 export default async function CatalogPage() {
   const products = await ProductService.getFeaturedProducts();
   const categories = await ProductService.getCategories();

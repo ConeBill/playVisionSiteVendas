@@ -14,10 +14,20 @@ function safeDecrypt(value: string | null | undefined) {
   }
 }
 
+async function resolveUserId(session: any): Promise<string | null> {
+  if (session?.user?.id) return session.user.id as string;
+  if (!session?.user?.email) return null;
+
+  const res = await db.query('SELECT id FROM users WHERE email = $1 LIMIT 1', [
+    session.user.email,
+  ]);
+  return res.rows[0]?.id ?? null;
+}
+
 export async function GET() {
   try {
     const session = (await getServerSession(authOptions as any)) as any;
-    const userId = session?.user?.id;
+    const userId = await resolveUserId(session);
     if (!userId) return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
 
     const res = await db.query('SELECT name, email, phone, cpf, address, address_number, address_complement, neighborhood, city, state, zip_code, reference FROM users WHERE id = $1', [userId]);
@@ -41,6 +51,7 @@ export async function GET() {
 
     return NextResponse.json({ user: safe });
   } catch (err) {
+    console.error('profile GET error', err);
     return NextResponse.json({ error: 'Falha ao buscar perfil.' }, { status: 500 });
   }
 }

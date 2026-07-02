@@ -43,7 +43,13 @@ export function ProductCard({ product }: ProductCardProps) {
       const res = await fetch('/api/favorites', {
         method: isFavorite ? 'DELETE' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId: product.id }),
+        body: JSON.stringify({
+          productId: product.id,
+          productName: product.name,
+          productImage: (product.images && product.images[0]) || null,
+          productPrice: product.price,
+          productSlug: product.slug,
+        }),
       });
       if (!res.ok) throw new Error();
       setIsFavorite(!isFavorite);

@@ -1,21 +1,25 @@
-import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
   const url = new URL(request.url);
 
   const protectedRoutes = ['/account', '/checkout'];
   const isProtected = protectedRoutes.some((route) => url.pathname.startsWith(route));
 
-  if (isProtected && !token) {
-    return NextResponse.redirect(new URL('/login', url));
+  if (isProtected) {
+    const sessionCookie = request.cookies.get('next-auth.session-token') || request.cookies.get('__Secure-next-auth.session-token');
+    if (!sessionCookie?.value) {
+      return NextResponse.redirect(new URL('/login', url));
+    }
   }
 
   const publicAuthRoutes = ['/login', '/register'];
-  if (publicAuthRoutes.includes(url.pathname) && token) {
-    return NextResponse.redirect(new URL('/', url));
+  if (publicAuthRoutes.includes(url.pathname)) {
+    const sessionCookie = request.cookies.get('next-auth.session-token') || request.cookies.get('__Secure-next-auth.session-token');
+    if (sessionCookie?.value) {
+      return NextResponse.redirect(new URL('/', url));
+    }
   }
 
   return NextResponse.next();

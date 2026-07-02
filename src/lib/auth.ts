@@ -6,6 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions = {
   adapter: pgAdapter,
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/login',
   },
@@ -43,5 +44,19 @@ export const authOptions = {
         };
       },
     }),
-  ]
+  ],
+  callbacks: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt(args: any) {
+      if (args.user?.id) args.token.userId = args.user.id;
+      return args.token;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session(args: any) {
+      const sessionUser = (args.session?.user ?? {}) as Record<string, any>;
+      if (!sessionUser.id && args.token?.userId) sessionUser.id = args.token.userId as string;
+      (args.session as any).user = sessionUser;
+      return args.session;
+    },
+  },
 };

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const search = useSearchParams();
@@ -70,6 +71,12 @@ export default function LoginForm() {
       >
         Entrar com Google
       </button>
+      <div className="text-center text-sm">
+        Não tem conta?
+        <Link href="/register" className="text-primary ml-1 underline">
+          Registre-se aqui
+        </Link>
+      </div>
     </form>
   );
 }
